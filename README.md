@@ -1,4 +1,4 @@
-# SpeedCubeSolver
+# 魔方
 Intent: Recently my brother and I talked about computer vision which inspired me to try more computer vision projects.  Previously, I created motion and face detection for a bigger home security system project.  My high school math mentioned I should program some sort of simulator to solve the Rubik's cube. I can solve the cube much faster than I can program a machine to solve the cube.  Now that my coding is a little more advanced, I'd like to take on this challenge. I think OpenCV should be sufficient for this task.
 
 OpenCV (Open Source Computer Vision Library) is an open source computer vision and machine learning software library. 
@@ -52,9 +52,11 @@ Group 0 = all available possibilities, Group 1 divides the cube in half, Group 2
 
 
 Read more here:
-    1. http://kociemba.org/math/twophase.htm
-    2. https://www.speedsolving.com/wiki/index.php/Kociemba%27s_Algorithm
+
+1. http://kociemba.org/math/twophase.htm
+2. https://www.speedsolving.com/wiki/index.php/Kociemba%27s_Algorithm
 
 Dependencies
 - kociemba
 - opencv-python
+
