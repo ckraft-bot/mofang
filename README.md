@@ -1,6 +1,4 @@
 # 魔方
-Intent: Recently my brother and I talked about computer vision which inspired me to try more computer vision projects.  Previously, I created motion and face detection for a bigger home security system project.  My high school math mentioned I should program some sort of simulator to solve the Rubik's cube. I can solve the cube much faster than I can program a machine to solve the cube.  Now that my coding is a little more advanced, I'd like to take on this challenge. I think OpenCV should be sufficient for this task.
-
 OpenCV (Open Source Computer Vision Library) is an open source computer vision and machine learning software library. 
     OpenCV was built to provide a common infrastructure for computer vision applications and to accelerate the use of machine perception in the commercial products. 
     Being a BSD-licensed product, OpenCV makes it easy for businesses to utilize and modify the code.
@@ -23,22 +21,22 @@ Featured in The Simpsons, The Big Bang Theory, a Spice Girls music video, and ma
 
 The notations of the classic Rubik's Cube are:
 
-        Slices:
-            F = front           F' = front prime
-            B = back            B' = back prime
-            U = upper           U' = upper prime
-            D = down            D' = down prime
-            L = left            L' = left prime
-            R = right           R' = right prime
-            M = middle (turns like L)       M' = middle prime
-            E = equator (turns like D)      E' = equator prime
-            S = standing (turns like F)     S' = standing prime
-            
-        Whole cube:
-            imagine your cube on a 3D plane
-            X = the whole cube moves like R
-            Y = the whole cube moves like U
-            Z = the whole cube moves like F
+    Slices:
+        F = front           F' = front prime
+        B = back            B' = back prime
+        U = upper           U' = upper prime
+        D = down            D' = down prime
+        L = left            L' = left prime
+        R = right           R' = right prime
+        M = middle (turns like L)       M' = middle prime
+        E = equator (turns like D)      E' = equator prime
+        S = standing (turns like F)     S' = standing prime
+        
+    Whole cube:
+        imagine your cube on a 3D plane
+        X = the whole cube moves like R
+        Y = the whole cube moves like U
+        Z = the whole cube moves like F
         
 Rules on turns:  
 The apostrophe denotes the surfaces of the cube turns in counter clockwise direction, otherwise assume clockwise turns.
@@ -50,7 +48,6 @@ About the Kociemba Alg/ Two-Phase Alg:
 The process divides the whole entity into smaller groupings thus constraining possibilities.
 Group 0 = all available possibilities, Group 1 divides the cube in half, Group 2 the other half hence the name two-phase method.
 
-
 Read more here:
 
 1. http://kociemba.org/math/twophase.htm
@@ -59,4 +56,5 @@ Read more here:
 Dependencies
 - kociemba
 - opencv-python
+
 
