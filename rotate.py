@@ -1,4 +1,4 @@
-
+import numpy as np
 
 def rotate_cw(face):
     final = np.copy(face)
