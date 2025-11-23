@@ -174,7 +174,7 @@ def main():
             break
         while True:
             front_face = find_face(video, videoWriter, up_face, right_face, front_face, down_face, left_face, back_face, text="Show white center") # front face
-            mf = front_face[0,4]
+            mf = front_face[4]
             print(front_face)
             print(mf)
 
@@ -198,7 +198,7 @@ def main():
                         break
             if broke == 1:
                 break
-            mu = up_face[0, 4]
+            mu = up_face[4]
             print(up_face)
             print(mu)
 
@@ -222,7 +222,7 @@ def main():
                         break
             if broke == 1:
                 break
-            md = down_face[0, 4]
+            md = down_face[4]
             print(down_face)
             print(md)
 
@@ -246,7 +246,7 @@ def main():
                         break
             if broke == 1:
                 break
-            mr = right_face[0, 4]
+            mr = right_face[4]
             print(right_face)
             print(mr)
 
@@ -270,7 +270,7 @@ def main():
                         break
             if broke == 1:
                 break
-            ml = left_face[0, 4]
+            ml = left_face[4]
             print(left_face)
             print(ml)
             #print("Show yellow center")
@@ -294,7 +294,7 @@ def main():
                         break
             if broke == 1:
                 break
-            mb = back_face[0, 4]
+            mb = back_face[4]
             print(back_face)
             #time.sleep(2)
             print(mb)
