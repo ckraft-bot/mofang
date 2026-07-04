@@ -7,7 +7,7 @@ step-by-step solution locally with OpenCV overlays and move notations.
 
 ## Live demo
 
-https://youtu.be/cVteUWCLpQ0?si=NTWkGIBiKTLFtgRl
+https://youtu.be/SBP_v1Ngc8E?is=UaqwMYN9lKfG8l4h
 
 ## Project structure
 
