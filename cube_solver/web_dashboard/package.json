@@ -1,0 +1,14 @@
+{
+  "name": "mofang-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite"
+  },
+  "dependencies": {
+    "three": "^0.161.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}

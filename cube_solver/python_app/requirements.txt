@@ -1,0 +1,6 @@
+kociemba>=1.2.1
+opencv-python>=4.9.0
+numpy>=1.26.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+websockets>=12.0
