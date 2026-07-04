@@ -20,11 +20,18 @@ and define which letter (U/R/F/D/L/B) corresponds to which physical color.
 """
 
 from collections import Counter
+from itertools import product
 
 FACE_ORDER = ["U", "R", "F", "D", "L", "B"]
 FACELET_COUNT = 54
 STICKERS_PER_FACE = 9
 CENTER_INDICES = {face: FACE_ORDER.index(face) * 9 + 4 for face in FACE_ORDER}
+FACE_ROTATION_PERMUTATIONS = {
+    0: (0, 1, 2, 3, 4, 5, 6, 7, 8),
+    1: (6, 3, 0, 7, 4, 1, 8, 5, 2),
+    2: (8, 7, 6, 5, 4, 3, 2, 1, 0),
+    3: (2, 5, 8, 1, 4, 7, 0, 3, 6),
+}
 
 
 class CubeStateError(ValueError):
@@ -57,18 +64,23 @@ class CubeState:
     def reset(self) -> None:
         self._faces = {f: None for f in FACE_ORDER}
 
-    def to_facelet_string(self) -> str:
-        """
-        Convert accumulated raw color scans into the 54-char Kociemba facelet
-        string. Raises CubeStateError with a human-readable reason if the
-        scan is incomplete or physically invalid.
-        """
-        if not self.is_fully_scanned():
-            raise CubeStateError(
-                f"Cannot solve: missing faces {self.missing_faces()}. Scan all 6 faces first."
-            )
+    @staticmethod
+    def _rotate_face(colors: list[str], turns: int) -> list[str]:
+        return [colors[index] for index in FACE_ROTATION_PERMUTATIONS[turns % 4]]
 
-        # Build color -> face-letter mapping from the 6 center stickers.
+    def _build_facelet_string(self, faces: dict[str, list[str]], color_to_letter: dict[str, str]) -> str:
+        facelets = []
+        for face in FACE_ORDER:
+            for raw_color in faces[face]:
+                if raw_color not in color_to_letter:
+                    raise CubeStateError(
+                        f"Sticker color '{raw_color}' on face {face} doesn't match any "
+                        f"known center color. Recalibrate or rescan."
+                    )
+                facelets.append(color_to_letter[raw_color])
+        return "".join(facelets)
+
+    def _build_color_to_letter_map(self) -> dict[str, str]:
         color_to_letter: dict[str, str] = {}
         for face in FACE_ORDER:
             center_color = self._faces[face][4]
@@ -82,20 +94,60 @@ class CubeState:
         if len(color_to_letter) != 6:
             raise CubeStateError("Expected exactly 6 distinct center colors, got a different count.")
 
-        # Translate every sticker's raw color to its face letter and assemble the string.
-        facelets = []
-        for face in FACE_ORDER:
-            for raw_color in self._faces[face]:
-                if raw_color not in color_to_letter:
-                    raise CubeStateError(
-                        f"Sticker color '{raw_color}' on face {face} doesn't match any "
-                        f"known center color. Recalibrate or rescan."
-                    )
-                facelets.append(color_to_letter[raw_color])
+        return color_to_letter
 
-        facelet_string = "".join(facelets)
-        self._validate_facelet_string(facelet_string)
-        return facelet_string
+    def to_facelet_string(self, auto_orient: bool = False) -> str:
+        """
+        Convert accumulated raw color scans into the 54-char Kociemba facelet
+        string. Raises CubeStateError with a human-readable reason if the
+        scan is incomplete or physically invalid.
+        """
+        if not self.is_fully_scanned():
+            raise CubeStateError(
+                f"Cannot solve: missing faces {self.missing_faces()}. Scan all 6 faces first."
+            )
+
+        color_to_letter = self._build_color_to_letter_map()
+
+        if not auto_orient:
+            facelet_string = self._build_facelet_string({face: list(colors) for face, colors in self._faces.items() if colors is not None}, color_to_letter)
+            self._validate_facelet_string(facelet_string)
+            return facelet_string
+
+        try:
+            import kociemba
+        except ImportError as exc:  # pragma: no cover - defensive fallback
+            raise CubeStateError("kociemba solver is required for orientation normalization.") from exc
+
+        best_candidate: str | None = None
+        best_score: int | None = None
+
+        for rotation_choice in product(range(4), repeat=len(FACE_ORDER)):
+            rotated_faces = {
+                face: self._rotate_face(self._faces[face], turns)
+                for face, turns in zip(FACE_ORDER, rotation_choice)
+            }
+            candidate = self._build_facelet_string(rotated_faces, color_to_letter)
+
+            try:
+                self._validate_facelet_string(candidate)
+                kociemba.solve(candidate)
+            except ValueError:
+                continue
+
+            score = sum(min(turns, 4 - turns) for turns in rotation_choice)
+            if best_score is None or score < best_score:
+                best_candidate = candidate
+                best_score = score
+                if score == 0:
+                    break
+
+        if best_candidate is None:
+            raise CubeStateError(
+                "Could not normalize face orientations. Make sure each face is scanned with the sticker grid upright."
+            )
+
+        return best_candidate
 
     @staticmethod
     def _validate_facelet_string(facelet_string: str) -> None:

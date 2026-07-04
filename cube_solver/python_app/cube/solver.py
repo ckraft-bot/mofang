@@ -72,8 +72,8 @@ def solve_facelet_string(facelet_string: str, max_depth: int = 24) -> list[Move]
 
 
 def solve_cube_state(cube_state) -> list[Move]:
-    """Convenience wrapper: takes a CubeState (see state.py), validates and solves it."""
-    facelet_string = cube_state.to_facelet_string()  # raises CubeStateError if incomplete/invalid
+    """Convenience wrapper: takes a CubeState (see state.py), normalizes orientation, validates, and solves it."""
+    facelet_string = cube_state.to_facelet_string(auto_orient=True)  # raises CubeStateError if incomplete/invalid
     return solve_facelet_string(facelet_string)
 
 
