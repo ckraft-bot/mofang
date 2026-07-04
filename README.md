@@ -16,6 +16,12 @@ Implemented so far:
 - `cube_solver/python_app/cube/solver.py` -- wraps the `kociemba` solver
   and returns move objects with notation.
 
+## Solver algs
+
+| Algorithm | Strategy | Speed | Best for |
+| --- | --- | --- | --- |
+| **Kociemba (Two‑Phase)** | Uses group theory to reduce cube to a restricted subgroup (G1), then solves | Very fast | Real‑time solvers and practical near‑optimal solutions |
+
 ## Run the local OpenCV solver
 
 ### 1) Install Python dependencies
@@ -55,21 +61,3 @@ Calibration tip:
 - Keep the center sticker fully inside the guide box while calibrating.
 - The app assumes the standard Rubik's Cube orientation: U white, R red, F green, D yellow, L orange, B blue.
 
-## Quick solver sanity check
-
-```powershell
-cd cube_solver/python_app
-python -c "
-from cube_solver.python_app.cube.state import CubeState
-from cube_solver.python_app.cube.solver import solve_cube_state
-
-known = 'BBURUDBFUFFFRRFUUFLULUFUDLRRDBBDBDBLUDDFLLRRBRLLLBRDDF'
-faces = {'U': known[0:9], 'R': known[9:18], 'F': known[18:27],
-         'D': known[27:36], 'L': known[36:45], 'B': known[45:54]}
-cs = CubeState()
-for face, s in faces.items():
-    cs.set_face(face, list(s))
-moves = solve_cube_state(cs)
-print(' '.join(m.notation for m in moves))
-"
-```

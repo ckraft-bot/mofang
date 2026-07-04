@@ -5,6 +5,7 @@ import numpy as np
 
 from cube_solver.python_app.capture.color_detection import ColorDetector
 from cube_solver.python_app.capture.scanner import FaceScanStateMachine
+from cube_solver.python_app.cube.state import CubeState
 
 
 class FaceScanStateMachineTests(unittest.TestCase):
@@ -60,6 +61,31 @@ class ColorDetectionTests(unittest.TestCase):
 
         self.assertEqual(detector.classify((178, 220, 220)), "red")
         self.assertEqual(detector.classify((0, 50, 190)), "white")
+
+
+class CubeStateOrientationTests(unittest.TestCase):
+    def test_to_facelet_string_auto_orients_rotated_face_scan(self) -> None:
+        known = "BBURUDBFUFFFRRFUUFLULUFUDLRRDBBDBDBLUDDFLLRRBRLLLBRDDF"
+        faces = {
+            "U": list(known[0:9]),
+            "R": list(known[9:18]),
+            "F": list(known[18:27]),
+            "D": list(known[27:36]),
+            "L": list(known[36:45]),
+            "B": list(known[45:54]),
+        }
+
+        rotated_u = [faces["U"][6], faces["U"][3], faces["U"][0], faces["U"][7], faces["U"][4], faces["U"][1], faces["U"][8], faces["U"][5], faces["U"][2]]
+
+        state = CubeState()
+        state.set_face("U", rotated_u)
+        state.set_face("R", faces["R"])
+        state.set_face("F", faces["F"])
+        state.set_face("D", faces["D"])
+        state.set_face("L", faces["L"])
+        state.set_face("B", faces["B"])
+
+        self.assertEqual(state.to_facelet_string(auto_orient=True), known)
 
 
 if __name__ == "__main__":
