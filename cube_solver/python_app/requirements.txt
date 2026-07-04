@@ -1,3 +1,4 @@
 kociemba>=1.2.1
 opencv-python>=4.9.0
 numpy>=1.26.0
+pillow>=10.4.0

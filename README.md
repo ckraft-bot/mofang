@@ -43,17 +43,34 @@ python -m cube_solver.python_app.main
 Controls in the OpenCV window:
 
 - `C` capture current face (order: U R F D L B)
+- `W/G/B/Y/O/E` select a previously scanned face by center color (white/green/blue/yellow/orange/red), then press `C` to rescan only that face
 - `S` solve after all faces are captured
 - `N` next solution step
 - `P` previous solution step
 - `R` reset scan
-- `1..6` choose calibration color (`white, yellow, blue, green, red, orange`)
+- `1..6` choose calibration color (`white, red, green, yellow, orange, blue`)
 - `K` sample center sticker and save calibration
 - `0` clear calibration profile
 - `Q` quit
 
 The terminal prints the full notation sequence (for example `R U R' U'`) and
 the window shows one move at a time.
+
+Live scan validation shown on-screen:
+
+- `Surfaces: x/6`
+- `Stickers: x/54`
+- Per-color sticker totals: `white/green/blue/yellow/orange/red (x/9)`
+- If counts are off after 6/6 faces, the overlay shows `Re-scan needed` with:
+  - `Missing: color+N`
+  - `Extra: color-N`
+
+Targeted rescan workflow:
+
+1. Finish at least one scan of the face you want to replace.
+2. Press the center-color key (`W/G/B/Y/O/E`) for that face.
+3. Align that face in the grid.
+4. Press `C` to overwrite only that face scan.
 
 Calibration tip:
 
