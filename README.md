@@ -1,15 +1,12 @@
 # Mofang - Rubik's Cube Solver via Computer Vision
 
 Scan a physical Rubik's cube with a webcam, solve it, and watch the
-step-by-step solution as a synced 3D animation + move list in a browser
-dashboard.
+step-by-step solution locally with OpenCV overlays and move notations.
 
 ## Project structure
 
 - `cube_solver/python_app/` -- OpenCV webcam scanner + color detection +
-  Kociemba solver. Runs a local FastAPI/WebSocket backend.
-- `cube_solver/web_dashboard/` -- Vite + Three.js frontend for the 3D cube
-  preview and move list UI.
+  Kociemba solver.
 
 ## Current status
 
@@ -17,54 +14,46 @@ Implemented so far:
 - `cube_solver/python_app/cube/state.py` -- builds and validates a 54-char
   Kociemba facelet string.
 - `cube_solver/python_app/cube/solver.py` -- wraps the `kociemba` solver
-  and returns move objects for animation.
-- `cube_solver/python_app/server/app.py` -- FastAPI backend with health,
-  WebSocket, and solve endpoints.
-- `cube_solver/web_dashboard/` -- simple dashboard shell that connects to
-  the backend.
+  and returns move objects with notation.
 
-## Run the app
+## Run the local OpenCV solver
 
 ### 1) Install Python dependencies
 
 From the repository root:
 
 ```powershell
-python -m pip install -r requirements.txt
+python -m pip install -r cube_solver/python_app/requirements.txt
 ```
 
-### 2) Start the backend
+### 2) Start local scanner + solver
 
 From the repository root, run:
 
 ```powershell
-python run_backend.py
+python -m cube_solver.python_app.main
 ```
 
-This starts the FastAPI backend on:
+Controls in the OpenCV window:
 
-- http://127.0.0.1:8000/health
-- http://127.0.0.1:8000/
+- `C` capture current face (order: U R F D L B)
+- `S` solve after all faces are captured
+- `N` next solution step
+- `P` previous solution step
+- `R` reset scan
+- `1..6` choose calibration color (`white, yellow, blue, green, red, orange`)
+- `K` sample center sticker and save calibration
+- `0` clear calibration profile
+- `Q` quit
 
-### 3) Start the frontend
+The terminal prints the full notation sequence (for example `R U R' U'`) and
+the window shows one move at a time.
 
-In a second terminal:
+Calibration tip:
 
-```powershell
-cd cube_solver/web_dashboard
-npm install
-npm run dev -- --host 127.0.0.1 --port 5173
-```
-
-Then open the frontend at:
-
-- http://127.0.0.1:5173/
-
-If port 5173 is busy, Vite will choose the next available port and report it in the terminal.
-
-### 4) Open the dashboard
-
-Open the frontend URL in your browser. The dashboard will connect to the backend over WebSocket and show the live camera preview, scan messages, and the 3D cube preview.
+- For red, sample under neutral lighting and press `K` 2-3 times to average noise.
+- Keep the center sticker fully inside the guide box while calibrating.
+- The app assumes the standard Rubik's Cube orientation: U white, R red, F green, D yellow, L orange, B blue.
 
 ## Quick solver sanity check
 
