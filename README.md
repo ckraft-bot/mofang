@@ -3,18 +3,20 @@
 Scan a physical Rubik's cube with a webcam, solve it, and watch the
 step-by-step solution locally with OpenCV overlays and move notations.
 
+![Solved cube result](cube_solver/python_app/media/cube_solved.png)
+
+## Live demo
+
+https://youtu.be/cVteUWCLpQ0?si=NTWkGIBiKTLFtgRl
+
 ## Project structure
 
 - `cube_solver/python_app/` -- OpenCV webcam scanner + color detection +
   Kociemba solver.
 
-## Current status
+## Architecture flow
 
-Implemented so far:
-- `cube_solver/python_app/cube/state.py` -- builds and validates a 54-char
-  Kociemba facelet string.
-- `cube_solver/python_app/cube/solver.py` -- wraps the `kociemba` solver
-  and returns move objects with notation.
+Webcam -> scanner -> color detect -> cube state -> Kociemba -> move overlay.
 
 ## Solver algs
 
